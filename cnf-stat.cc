@@ -63,28 +63,47 @@ int main(int argc, char *argv[])
 
 	fclose(fp);
 
-	typedef std::map<unsigned int, unsigned int> hist_map;
-
-	hist_map clause_length_hist;
-
 	unsigned int nr_literals = 0;
+	unsigned int nr_negative_literals = 0;
+	unsigned int nr_positive_literals = 0;
 	for (cnf::clause_vector::iterator it = f.clauses.begin(),
 		end = f.clauses.end(); it != end; ++it)
 	{
 		cnf::clause::ptr clause(*it);
 
-		unsigned int size = clause->literals.size();
-		nr_literals += size;
-		++clause_length_hist[size];
+		nr_literals += clause->literals.size();
+
+		for (cnf::clause::literal_vector::iterator lit = clause->literals.begin(),
+			lend = clause->literals.end(); lit != lend; ++lit)
+		{
+			cnf::literal literal(*lit);
+
+			if (literal < 0)
+				++nr_negative_literals;
+			else
+				++nr_positive_literals;
+		}
 	}
 
-	printf("Literals: %u\n", nr_literals);
+	printf("Literals: %u (%u negative, %u positive)\n",
+		nr_literals, nr_negative_literals, nr_positive_literals);
+
+	typedef std::map<unsigned int, unsigned int> hist_map;
+	hist_map clause_length_hist;
+
+	for (cnf::clause_vector::iterator it = f.clauses.begin(),
+		end = f.clauses.end(); it != end; ++it)
+	{
+		cnf::clause::ptr clause(*it);
+
+		++clause_length_hist[clause->literals.size()];
+	}
 
 	printf("Clause length histogram:\n");
 	for (hist_map::iterator it = clause_length_hist.begin(),
 		end = clause_length_hist.end(); it != end; ++it)
 	{
-		printf("\t%2u: %u\n", it->first, it->second);
+		printf("%2u: %u\n", it->first, it->second);
 	}
 
 	return 0;
