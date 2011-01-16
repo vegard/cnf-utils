@@ -6,7 +6,8 @@ programs := \
 	cnf-shuffle-literals \
 	cnf-shuffle-clauses \
 	cnf-sort-literals \
-	cnf-sort-clauses
+	cnf-sort-clauses \
+	cnf-propagate
 
 all: $(programs)
 
