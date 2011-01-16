@@ -54,6 +54,23 @@ public:
 	{
 		clauses.push_back(c);
 	}
+
+	void print(FILE *fp)
+	{
+		for (clause_vector::iterator cit = clauses.begin(),
+			cend = clauses.end(); cit != cend; ++cit)
+		{
+			clause::ptr c(*cit);
+
+			for (clause::literal_vector::iterator lit = c->literals.begin(),
+				lend = c->literals.end(); lit != lend; ++lit)
+			{
+				fprintf(fp, "%d ", *lit);
+			}
+
+			fprintf(fp, "0\n");
+		}
+	}
 };
 
 #endif

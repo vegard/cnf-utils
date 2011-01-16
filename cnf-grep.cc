@@ -80,19 +80,7 @@ int main(int argc, char *argv[])
 	}
 
 	printf("p cnf %u %u\n", nr_variables, f.clauses.size());
-	for (cnf::clause_vector::iterator cit = f.clauses.begin(),
-		cend = f.clauses.end(); cit != cend; ++cit)
-	{
-		cnf::clause::ptr c(*cit);
-
-		for (cnf::clause::literal_vector::iterator lit = c->literals.begin(),
-			lend = c->literals.end(); lit != lend; ++lit)
-		{
-			printf("%d ", *lit);
-		}
-
-		printf("0\n");
-	}
+	f.print(stdout);
 
 	fclose(fp);
 	return 0;
