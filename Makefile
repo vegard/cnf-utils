@@ -7,7 +7,8 @@ programs := \
 	cnf-shuffle-clauses \
 	cnf-sort-literals \
 	cnf-sort-clauses \
-	cnf-propagate
+	cnf-propagate \
+	cnf-stat
 
 all: $(programs)
 
