@@ -4,7 +4,9 @@ programs := \
 	cnf-grep \
 	cnf-shuffle-variables \
 	cnf-shuffle-literals \
-	cnf-shuffle-clauses
+	cnf-shuffle-clauses \
+	cnf-sort-literals \
+	cnf-sort-clauses
 
 all: $(programs)
 
