@@ -1,0 +1,59 @@
+/*  cnf-utils  Copyright (c) 2011, Vegard Nossum
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef CNF_HH
+#define CNF_HH
+
+#include <boost/shared_ptr.hpp>
+
+#include <vector>
+
+class cnf {
+public:
+	typedef int literal;
+
+	class clause {
+	public:
+		typedef boost::shared_ptr<clause> ptr;
+		typedef std::vector<literal> literal_vector;
+
+		literal_vector literals;
+
+		clause()
+		{
+		}
+
+		void add(literal x)
+		{
+			literals.push_back(x);
+		}
+	};
+
+	typedef std::vector<clause::ptr> clause_vector;
+
+	clause_vector clauses;
+
+	cnf()
+	{
+	}
+
+	void add(clause::ptr c)
+	{
+		clauses.push_back(c);
+	}
+};
+
+#endif

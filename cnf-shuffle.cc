@@ -1,4 +1,4 @@
-/*  cnf-grep  Copyright (c) 2011, Vegard Nossum
+/*  cnf-shuffle  Copyright (c) 2011, Vegard Nossum
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,30 +17,22 @@
 extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 }
+
+#include <algorithm>
 
 #include "cnf.hh"
 
-/* TODO:
- * options: -c count number of matches
- *          -C context (recursively match other clauses that contain literals of the matched clauses)
- *          -v invert match
- *
- * advanced pattterns -- AND, OR, NOT
- */
-
 int main(int argc, char *argv[])
 {
-	if (argc < 2) {
-		fprintf(stderr, "Usage: %s [OPTION]... PATTERN [FILE] ...\n", argv[0]);
-		exit(EXIT_FAILURE);
-	}
-
-	int pattern = atoi(argv[1]);
+	/* XXX: This is not actually guaranteed to change the result of
+	 * std::random_shuffle, but it works with _MY_ gcc/libc/libstdc++ */
+	srand(time(NULL));
 
 	FILE *fp;
-	if (argc > 2) {
-		fp = fopen(argv[2], "r");
+	if (argc > 1) {
+		fp = fopen(argv[1], "r");
 		/* XXX: Real error checking */
 		assert(fp);
 	} else {
@@ -56,8 +48,7 @@ int main(int argc, char *argv[])
 
 	cnf f;
 	for (unsigned int i = 0; i < nr_clauses; ++i) {
-		cnf::clause::ptr clause(new cnf::clause());
-		bool match = false;
+		cnf::clause::ptr c(new cnf::clause());
 
 		while (1) {
 			int literal;
@@ -69,15 +60,20 @@ int main(int argc, char *argv[])
 			if (!literal)
 				break;
 
-			clause->add(literal);
-
-			if (literal == pattern || -literal == pattern)
-				match = true;
+			c->add(literal);
 		}
 
-		if (match)
-			f.add(clause);
+		f.add(c);
 	}
+
+	for (cnf::clause_vector::iterator it = f.clauses.begin(),
+		end = f.clauses.end(); it != end; ++it)
+	{
+		cnf::clause::ptr c(*it);
+		std::random_shuffle(c->literals.begin(), c->literals.end());
+	}
+
+	std::random_shuffle(f.clauses.begin(), f.clauses.end());
 
 	printf("p cnf %u %u\n", nr_variables, f.clauses.size());
 	for (cnf::clause_vector::iterator cit = f.clauses.begin(),
