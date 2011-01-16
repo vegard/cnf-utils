@@ -1,3 +1,5 @@
+CXXFLAGS := -Wall -g -O3
+
 all: cnf-grep cnf-shuffle
 
 clean:
