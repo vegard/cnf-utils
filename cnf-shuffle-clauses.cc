@@ -1,4 +1,4 @@
-/*  cnf-shuffle  Copyright (c) 2011, Vegard Nossum
+/*  cnf-shuffle-clauses  Copyright (c) 2011, Vegard Nossum
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,16 +23,6 @@ extern "C" {
 #include <algorithm>
 
 #include "cnf.hh"
-
-/* TODO:
- * options: -v shuffle (rename) variables
- *          -l shuffle literals within clauses
- *          -c shuffle clauses
- *
- * Maybe variable shuffling/renaming should come with an option to output
- * the mapping so that solutions can be mapped back. Maybe that's a job for
- * another tool 'cnf-remap'?
- */
 
 int main(int argc, char *argv[])
 {
@@ -74,39 +64,6 @@ int main(int argc, char *argv[])
 		}
 
 		f.add(c);
-	}
-
-	/* Shuffle variables */
-	if (true) {
-		std::vector<int> variables(nr_variables + 1);
-		for (unsigned int i = 0; i < nr_variables + 1; ++i)
-			variables[i] = i;
-
-		std::random_shuffle(++variables.begin(), variables.end());
-
-		for (cnf::clause_vector::iterator cit = f.clauses.begin(),
-			cend = f.clauses.end(); cit != cend; ++cit)
-		{
-			cnf::clause::ptr c(*cit);
-
-			for (cnf::clause::literal_vector::iterator lit = c->literals.begin(),
-				lend = c->literals.end(); lit != lend; ++lit)
-			{
-				int literal = *lit;
-				if (literal < 0)
-					*lit = -variables[-*lit];
-				else
-					*lit = variables[*lit];
-			}
-		}
-	}
-
-	/* Shuffle literals */
-	for (cnf::clause_vector::iterator it = f.clauses.begin(),
-		end = f.clauses.end(); it != end; ++it)
-	{
-		cnf::clause::ptr c(*it);
-		std::random_shuffle(c->literals.begin(), c->literals.end());
 	}
 
 	/* Shuffle clauses */

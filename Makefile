@@ -1,6 +1,12 @@
 CXXFLAGS := -Wall -g -O3
 
-all: cnf-grep cnf-shuffle
+programs := \
+	cnf-grep \
+	cnf-shuffle-variables \
+	cnf-shuffle-literals \
+	cnf-shuffle-clauses
+
+all: $(programs)
 
 clean:
-	rm -rf cnf-grep cnf-shuffle
+	rm -rf $(programs)
