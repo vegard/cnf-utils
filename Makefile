@@ -2,6 +2,7 @@ CXXFLAGS := -Wall -g -O3
 
 programs := \
 	cnf-cat \
+	cnf-clause \
 	cnf-grep \
 	cnf-shuffle-variables \
 	cnf-shuffle-literals \
