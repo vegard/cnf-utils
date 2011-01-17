@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 			f.add(clause);
 	}
 
-	printf("p cnf %u %u\n", nr_variables, f.clauses.size());
+	printf("p cnf %u %lu\n", nr_variables, f.clauses.size());
 	f.print(stdout);
 
 	fclose(fp);
