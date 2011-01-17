@@ -7,6 +7,7 @@ programs := \
 	cnf-shuffle-clauses \
 	cnf-sort-literals \
 	cnf-sort-clauses \
+	cnf-pack \
 	cnf-propagate \
 	cnf-stat
 
